@@ -1,0 +1,73 @@
+<!-- This is a static file -->
+<!-- served from your routes in server.js -->
+
+<!-- You might want to try something fancier: -->
+<!-- html/nunjucks docs: http://mozilla.github.io/nunjucks/ -->
+<!-- jade: http://jade-lang.com/ -->
+<!-- haml: http://haml.info/tutorial.html -->
+<!-- hbs(handlebars): http://handlebarsjs.com/expressions.html -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Dagwood</title>
+    <meta name="description" content="A cool thing made with Glitch">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/public/style.css">
+</head>
+
+<body>
+    <header>
+        <h1>
+            Dagwood
+        </h1>
+    </header>
+
+    <main>
+        <form>
+            <label for="target">Existing:
+                <select name=target>
+                    <option value="">Select existing</option>
+                    {% for node_id, node in nodes.items() %}
+                    <option value="{{ node_id }}">{{node.title}}</option>
+                    {% endfor %}
+                </select>
+            </label>
+
+            <label for="name">Depends on: <input name="name" type="text" maxlength="100"
+                    placeholder="Node name"></label>
+
+            <label for="class">Which relates to</label>
+            <select name=class>
+                <option></option>
+                {% for class in classes %}
+                <option>{{ class }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Submit</button>
+        </form>
+        <section class="nodes">
+            <ul id="nodes">
+                {% for node1, node2 in graph %}
+                <li>{{ node1.title }} -> {{ node2.title }}</li>
+                {% endfor %}
+            </ul>
+        </section>
+        <img id="graph" src="/graph.svg" />
+    </main>
+
+    <footer>
+    </footer>
+
+    <!-- Your web-app is https, so your scripts need to be too -->
+    <script src="https://code.jquery.com/jquery-2.2.1.min.js"
+        integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00=" crossorigin="anonymous"></script>
+    <script src="/public/client.js"></script>
+
+</body>
+
+</html>
