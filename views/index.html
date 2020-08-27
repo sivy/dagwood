@@ -17,6 +17,81 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/public/style.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: helvetica, arial, sans-serif;
+            margin: 25px;
+        }
+
+        h1 {
+            font-weight: bold;
+            color: pink;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        p {
+            max-width: 600px;
+        }
+
+        form {
+            margin-bottom: 25px;
+            padding: 13px 10px 3px;
+            background-color: cyan;
+            /* display: block; */
+            width: 100%;
+            border-radius: 3px;
+        }
+
+        input {
+            margin-bottom: 10px;
+            padding: 5px;
+            border: 1px solid lightgrey;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+
+        button {
+            font-size: 16px;
+            border-radius: 3px;
+            background-color: lightgrey;
+            border: 1px solid grey;
+            box-shadow: 2px 2px teal;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: yellow;
+        }
+
+        button:active {
+            box-shadow: none;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+
+        footer {
+            margin-top: 50px;
+            padding-top: 25px;
+            border-top: 1px solid lightgrey;
+        }
+
+        footer>a {
+            color: #BBBBBB;
+        }
+
+        .nicejob {
+            text-decoration: line-through;
+        }
+    </style>
 </head>
 
 <body>
@@ -25,24 +100,40 @@
             Dagwood
         </h1>
     </header>
-
+    <p>
+        Dagwood is a simple directed graph tool that will eventually grow into
+        something more interesting. But I wanted the functionality so that's where I
+        started.
+    </p>
     <main>
         <form>
-            <label for="target">Existing:
-                <select name=target>
+            <label for="target">
+                <select id="targetMenu" name=target>
                     <option value="">Select existing</option>
                     {% for node_id, node in nodes.items() %}
-                    <option value="{{ node_id }}">{{node.title}}</option>
+                    <option value="{{ node_id }}" {% if data.node == node_id|string() %}selected='selected' {% endif %}>
+                        {{node.title}}</option>
                     {% endfor %}
                 </select>
             </label>
+            depends on
+            <label for="from">
+                <select id="fromMenu" name=from>
+                    <option value="">Select existing</option>
+                    {% for node_id, node in nodes.items() %}
+                    <option value="{{ node_id }}" {% if data.node == node_id|string() %}selected='selected' {% endif %}>
+                        {{node.title}}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            or
+            <label for="name">
+                <input id="nodename" name="name" type="text" maxlength="100" placeholder="a new node">
+            </label>
 
-            <label for="name">Depends on: <input name="name" type="text" maxlength="100"
-                    placeholder="Node name"></label>
-
-            <label for="class">Which relates to</label>
-            <select name=class>
-                <option></option>
+            <label for="class">in the area of</label>
+            <select id="classMenu" name=class>
+                <option value="">topic</option>
                 {% for class in classes %}
                 <option>{{ class }}</option>
                 {% endfor %}
@@ -57,7 +148,7 @@
                 {% endfor %}
             </ul>
         </section>
-        <img id="graph" src="/graph.svg" />
+        <object style="width:100%" id="graph" type="image/svg+xml" data="/graph.svg"></object>
     </main>
 
     <footer>

@@ -1,6 +1,7 @@
 import os
 import sqlite3
 from collections import namedtuple
+import re
 
 DBNAME = 'database.db'
 
@@ -56,7 +57,7 @@ SELECT * FROM nodes;
 """
 
 CREATE_EDGE_SQL = """
-INSERT INTO edges (xfrom, xto) VALUES (?, ?);
+INSERT OR IGNORE INTO edges (xfrom, xto) VALUES (?, ?);
 """
 
 GET_ALL_EDGES_SQL = """
@@ -127,7 +128,7 @@ def create_node(title, label=None, classes=None, effect='', weight=1.0):
     c = conn.cursor()
 
     if label is None:
-        label = title.lower().replace(" ", "_")
+        label = re.sub(r'[\/\- \:]', '_', title.lower())
 
     node = Node(
         id=None,
