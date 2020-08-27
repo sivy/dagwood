@@ -27,22 +27,22 @@ $(function () {
 
     $('form').submit(function (event) {
         event.preventDefault();
-        node = $('#nodename').val();
         target = $('#targetMenu').val();
         from = $('#fromMenu').val();
         class_ = $('#classMenu').val();
-        console.log(node, target, from, class_)
+        console.log(target, from, class_)
 
         if (
-            (node == '' && from == '') || target == ''
+            from == '' || target == ''
         ) {
             alert("Something went wrong");
             return
         }
 
         $.post('/graph?' + $.param({
-            'node': node, 'target': target,
-            'from': from, 'class': class_
+            'target': target,
+            'from': from,
+            'class': class_
         }), function () {
             $.get('/nodes.json', function (data) {
                 console.log(data);
@@ -63,7 +63,7 @@ $(function () {
             $("#graph").attr("data", "/graph.svg?" + d.getTime())
             $('input').val('');
             $('input').focus();
-            $('#targetMenu').val(node);
+            $('#targetMenu').val(from);
             $('#classMenu').val("");
         });
     });

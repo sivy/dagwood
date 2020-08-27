@@ -56,6 +56,10 @@ GET_ALL_NODES_SQL = """
 SELECT * FROM nodes;
 """
 
+GET_NODE_SQL = """
+SELECT * FROM nodes WHERE title = ?;
+"""
+
 CREATE_EDGE_SQL = """
 INSERT OR IGNORE INTO edges (xfrom, xto) VALUES (?, ?);
 """
@@ -184,8 +188,8 @@ def get_nodes_by_id():
     conn.close()
 
     node_graph = {n.id:n for n in [Node(*r) for r in ret]}
-    print(node_graph)
     return node_graph
+
 
 def get_nodes_data():
     conn = sqlite3.connect(DBNAME)
@@ -198,8 +202,22 @@ def get_nodes_data():
     conn.close()
 
     node_graph = {n.id:n._asdict() for n in [Node(*r) for r in ret]}
-    print(node_graph)
     return node_graph
+
+
+def get_node(title):
+    conn = sqlite3.connect(DBNAME)
+    c = conn.cursor()
+
+    c.execute(GET_NODE_SQL, (title, ))
+    ret = c.fetchone()
+    conn.commit()
+    conn.close()
+
+    if not ret:
+        return None
+
+    return Node(*ret)
 
 
 def get_all_edges():
